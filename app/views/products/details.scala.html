@@ -1,0 +1,64 @@
+@(productForm: Form[Product])
+
+@implicitFC = @{
+  b3.horizontal.fieldConstructor("col-md-2", "col-md-4")
+}
+
+@main("Product form") {
+
+  <h3>Product form</h3>
+
+  @b3.form(action = routes.Products.save(), 'enctype -> "multipart/form-data") {
+
+    <fieldset>
+      <legend>Product (@productForm("name").valueOr("New"))</legend>
+      @b3.hidden(name = "id", value = productForm("id").valueOr(""))
+      @b3.text(productForm("ean"), '_label -> "EAN")
+      @b3.text(productForm("name"), '_label -> "Name")
+      @b3.textarea(productForm("description"), '_label -> "Description")
+
+      <div class="control-group">
+        <div class="controls col-md-4 col-md-offset-2">
+
+          <div class="checkbox">
+            <label for="tags_0_id">
+              <input type="checkbox" id="tags_0_id" name="tags[0].id" value="1"
+                @for(i <- 0 to 2) {
+                  @if(productForm("tags[" + i + "].id").value == "1") {
+                    checked="true" }
+                }> lightweight
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label for="tags_1_id">
+              <input type="checkbox" id="tags_1_id" name="tags[1].id" value="2"
+                @for(i <- 0 to 2) {
+                  @if(productForm("tags[" + i + "].id").value == "2") {
+                    checked="true" }
+                }> metal
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label for="tags_2_id">
+              <input type="checkbox" id="tags_2_id" name="tags[2].id" value="3"
+                @for(i <- 0 to 2) {
+                  @if(productForm("tags[" + i + "].id").value == "3") {
+                    checked="true" }
+                }> plastic
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+    </fieldset>
+
+    @b3.free('_id -> "idFormGroup") {
+      <button type="submit" class="btn btn-primary"> <span class="glyphicon glyphicon-ok"></span> Save</button>
+      <a class="btn btn-default" href="@routes.Products.index()"> <span class="glyphicon glyphicon-delete"></span>
+        Cancel</a>
+    }
+  }
+}
